@@ -196,7 +196,7 @@ final class Installer: NSObject, ObservableObject {
     private func prepare(name: String, ramMB: Int, rom: URL) throws -> VirtualMac {
         // A new machine identity, as VZMacMachineIdentifier makes one: a random ECID.
         let ecid = UInt64.random(in: 1 << 40 ..< 1 << 62)
-        var mac = VirtualMac(name: name, ecid: ecid, seed: 0, ramMB: ramMB, diskBytes: 64 << 30)
+        var mac = VirtualMac(name: name, ecid: ecid, seed: 0, ramMB: ramMB, diskBytes: 110 << 30)
         (mac.screenWidth, mac.screenHeight) = Device.fittingScreen
         let fm = FileManager.default
         try fm.createDirectory(at: mac.directory, withIntermediateDirectories: true)
@@ -205,13 +205,13 @@ final class Installer: NSObject, ObservableObject {
         try fm.copyItem(at: rom, to: mac.rom)
         guard fm.createFile(atPath: mac.disk.path, contents: nil) else { throw message("Cannot create the disk.") }
         let h = try FileHandle(forWritingTo: mac.disk)
-        try h.truncate(atOffset: UInt64(64) << 30) // sparse: blocks are only used as macOS writes them
+        try h.truncate(atOffset: UInt64(110) << 30) // sparse: blocks are only used as macOS writes them
         try h.close()
         guard henge_make_aux(mac.aux.path) == 0 else { throw message("Cannot create the auxiliary storage.") }
         let info: [String: Any] = ["name": name, "ecid": ecid, "seed": 0, "ramMB": ramMB]
         try JSONSerialization.data(withJSONObject: info).write(to: mac.directory.appendingPathComponent("machine.json"))
-        mac.diskBytes = 64 << 30
-        HengeLog.log("install", "new machine \(name): ECID \(ecid), 64 GB disk")
+        mac.diskBytes = 110 << 30
+        HengeLog.log("install", "new machine \(name): ECID \(ecid), 110 GB disk")
         return mac
     }
 
