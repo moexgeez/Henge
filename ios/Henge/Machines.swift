@@ -122,7 +122,7 @@ final class Machines: ObservableObject {
                let info = try? JSONDecoder().decode(MachineFile.self, from: data),
                fm.fileExists(atPath: item.appendingPathComponent("disk.img").path) {
                 var mac = VirtualMac(id: id, name: info.name ?? "Mac", ecid: info.ecid, seed: info.seed ?? 0,
-                                     ramMB: info.ramMB ?? Device.suggestedRAMGB * 1024, diskBytes: 64 << 30)
+                                     ramMB: info.ramMB ?? Device.suggestedRAMGB * 1024, diskBytes: 110 << 30)
                 let os = (try? String(contentsOf: marker, encoding: .utf8))?.trimmingCharacters(in: .whitespacesAndNewlines) ?? ""
                 mac.osName = os.isEmpty ? nil : os
                 (mac.screenWidth, mac.screenHeight) = Device.fittingScreen
